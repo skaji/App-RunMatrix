@@ -54,7 +54,7 @@ sub system : method {
     my ($self, $module, $version, @cmd) = @_;
     local %ENV = %ENV;
     if ($version !~ /^(default|core|system)$/) {
-        if (my @lib = $self->local_lib($module, $version)) {
+        if (my @lib = $self->local_lib($module, $version, 0)) {
             push @lib, $ENV{PERL5LIB} if $ENV{PERL5LIB};
             $ENV{PERL5LIB} = join ":", @lib;
         }
@@ -103,11 +103,12 @@ sub local {
 }
 
 sub local_lib {
-    my ($self, $module, $version) = @_;
+    my ($self, $module, $version) = (shift, shift, shift);
+    my $need_arch = @_ ? shift : 1;
     my $local = $self->local($module, $version);
     map { Cwd::abs_path($_) } grep { -d $_ } (
         File::Spec->catdir($local, "lib/perl5"),
-        File::Spec->catdir($local, "lib/perl5/$Config{archname}"),
+        $need_arch ? File::Spec->catdir($local, "lib/perl5/$Config{archname}") : (),
     );
 }
 

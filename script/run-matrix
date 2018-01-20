@@ -1,0 +1,25 @@
+#!perl
+use strict;
+use warnings;
+
+use App::RunMatrix;
+App::RunMatrix->new->run(@ARGV);
+
+__END__
+
+=head1 NAME
+
+run-matrix - run commands against module version matrix
+
+=head1 SYNOPSIS
+
+  > run-matrix  module_spec  commands...
+
+  eg:
+  > run-matrix Time::Piece:1.15,1.20,1.30,system  perl benchmark.pl
+
+=head1 AUTHOR
+
+Shoichi Kaji
+
+=cut
